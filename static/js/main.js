@@ -35,7 +35,7 @@ function getPost() {
                 list[l][1] *= 10;
             }
             //$("#post").html(lis);
-            WordCloud(document.getElementById('post'), { list: list, minSize: 20} );
+            WordCloud(document.getElementById('post'), { list: list} );
         });
 
     });
