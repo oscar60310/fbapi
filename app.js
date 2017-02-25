@@ -2,6 +2,8 @@ var express = require('express');
 var http = require('http');
 var session = require('express-session');
 var request = require('request');
+
+
 var app = express();
 app.use(session({
     secret: process.env.sessionKEY,
@@ -57,8 +59,7 @@ function getPosts(url, res) {
             getPosts(data.next, res);
         else {
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify(posts));
-
+            cut(res);
         }
 
     });
@@ -79,4 +80,7 @@ function getPost(url) {
             resolve({ posts: posts, next: next });
         });
     });
+}
+function cut(res){
+    res.end(JSON.stringify(posts));
 }
