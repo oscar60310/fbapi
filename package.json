@@ -19,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/oscar60310/fbapi/issues"
   },
-  "homepage": "https://github.com/oscar60310/fbapi#readme"
+  "homepage": "https://github.com/oscar60310/fbapi#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "express-session": "^1.15.1",
+    "http": "0.0.0",
+    "request": "^2.79.0"
+  }
 }
