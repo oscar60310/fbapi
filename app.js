@@ -73,8 +73,9 @@ function getPost(url) {
                     posts.push(data.data[d].message);
             }
             var next = null;
-            if (data.paging.next)
-                next = data.paging.next;
+            if (data.paging)
+                if(data.paging.next)
+                    next = data.paging.next;
             resolve({ posts: posts, next: next });
         });
     });
