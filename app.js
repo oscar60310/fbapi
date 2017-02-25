@@ -16,7 +16,7 @@ app.get('/api/user', function (req, res) {
     if (req.session.name)
         re = { statu: 'ok', name: req.session.name };
     else
-        re = { statu: 'not login', url: 'https://www.facebook.com/v2.8/dialog/oauth?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code&scopes=user_posts' };
+        re = { statu: 'not login', url: 'https://www.facebook.com/v2.8/dialog/oauth?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code&scope=user_posts' };
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(re));
 });
