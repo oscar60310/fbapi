@@ -55,7 +55,7 @@ function getPosts(url, res) {
         for (var p in data.posts) {
             posts.push(data.posts[p]);
         }
-        if (posts.length < 100 && data.next != null)
+        if (posts.length < 500 && data.next != null)
             getPosts(data.next, res);
         else {
             res.setHeader('Content-Type', 'application/json');

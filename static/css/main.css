@@ -1,0 +1,11 @@
+html,body,div,button{
+    font-family: 微軟正黑體;
+}
+.btnm{
+    margin: 1em;
+    position: absolute;
+}
+#post{
+    height: 100%;
+    width: 100%;
+}

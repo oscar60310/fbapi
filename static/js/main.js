@@ -1,10 +1,14 @@
 check();
+var gettingPost = false;
 function check() {
     $.get('../api/user', function (data) {
         if (data.statu == 'ok') {
             $("#start").html(data.name);
             $("#start").click(function () {
-                getPost();
+                if (!gettingPost) {
+                    gettingPost = true;
+                    getPost();
+                }
             });
         }
         else {
@@ -32,10 +36,11 @@ function getPost() {
             // console.log the list returned in this callback.
             // console.log(list);
             for (var l in list) {
-                list[l][1] *= 10;
+                list[l][1] *= (list[l][1] < 10)? 10:1;
             }
             //$("#post").html(lis);
-            WordCloud(document.getElementById('post'), { list: list} );
+            WordCloud(document.getElementById('post'), { list: list });
+            gettingPost = false;
         });
 
     });
