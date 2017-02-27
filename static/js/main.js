@@ -3,10 +3,12 @@ var gettingPost = false;
 function check() {
     $.get('../api/user', function (data) {
         if (data.statu == 'ok') {
-            $("#start").html(data.name);
+            $("#tit").html(data.name + '，你好！');
+            $("#start").html('開始製作');
             $("#start").click(function () {
                 if (!gettingPost) {
                     gettingPost = true;
+                    $("#start").html('正在讀取資料...');
                     getPost();
                 }
             });
@@ -38,12 +40,16 @@ function getPost() {
             for (var l in list) {
                 list[l][1] *= (list[l][1] < 10) ? 10 : 1;
             }
-            //$("#post").html(lis);
-            WordCloud(document.getElementById('post'), { list: list });
+            $("#post").removeClass('remove');
+
+
             // $('#start').addClass('remove');
             $('html, body').animate({
                 scrollTop: $("#post").offset().top
-            }, 500);
+            }, 500, function () {
+                 WordCloud(document.getElementById('post'), { list: list });
+            });
+            $("#start").html('再試一次！');
             gettingPost = false;
         });
 
