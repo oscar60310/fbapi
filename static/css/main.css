@@ -17,7 +17,10 @@ html,body,div,button{
 .btnm:hover{
     background-color:#355088;
 }
+.remove{
+    display: none;
+}
 #post{
-    height: 90%;
-    width: 90%;
+    height: 100%;
+    width: 100%;
 }

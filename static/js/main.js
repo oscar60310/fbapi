@@ -40,6 +40,7 @@ function getPost() {
             }
             //$("#post").html(lis);
             WordCloud(document.getElementById('post'), { list: list });
+            $('#start').addClass('remove');
             gettingPost = false;
         });
 
