@@ -1,10 +1,14 @@
 html,body,div,button{
     font-family: 微軟正黑體;
 }
+html,body{
+    margin: 0;
+    height: 100%;
+}
 .btndiv{
     width: 100%;
     text-align: center;
-    margin-top:100px;
+    margin-top: 50px;
 }
 .btnm{
     font-size:16pt;
@@ -23,4 +27,18 @@ html,body,div,button{
 #post{
     height: 100%;
     width: 100%;
+}
+.bg{
+    background-image: url('../photo/wordcloud.png');
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    padding-top: 18%;
+}
+h2{
+    font-size: 30pt;
+}
+a{
+    color: blue;
+    
 }
