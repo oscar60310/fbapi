@@ -30,7 +30,7 @@ function getPost() {
 
         //console.log(data);
         var options = {
-            workerUrl: '../fb/js/wordfreq.worker.js'
+            workerUrl: '../js/wordfreq.worker.js'
         };
         // Initialize and run process() function
         var lis = '';
