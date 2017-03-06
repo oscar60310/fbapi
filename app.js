@@ -12,7 +12,7 @@ app.use(session({
     saveUninitialized: true
 }));
 var port = process.env.port || 1337;
-app.use('/fb', express.static('static'));
+app.use('/', express.static('static'));
 app.get('/api/user', function (req, res) {
     var re;
     if (req.session.name)
@@ -29,7 +29,7 @@ app.get('/api/code', function (req, res) {
         getUser(userdata.access_token).then(function (data) {
             req.session.name = data.name;
             req.session.fbid = data.id;
-            res.redirect('../fb');
+            res.redirect('../');
         });
     });
 });
