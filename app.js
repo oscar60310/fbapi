@@ -11,6 +11,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+
 var port = process.env.port || 1337;
 app.use('/', express.static('static'));
 app.get('/api/user', function (req, res) {
@@ -33,13 +34,10 @@ app.get('/api/code', function (req, res) {
         });
     });
 });
-var posts = [];
+
 app.get('/api/post', function (req, res) {
-
     var url = 'https://graph.facebook.com/v2.8/me/posts?limit=100&access_token=' + req.session.key;
-    posts = [];
-    getPosts(url,res);
-
+    getAllPosts(url,res);
 });
 http.createServer(app).listen(port);
 
@@ -50,37 +48,26 @@ function getUser(key) {
         });
     });
 }
-function getPosts(url, res) {
-    getPost(url).then(function (data) {
-        for (var p in data.posts) {
-            posts.push(data.posts[p]);
-        }
-        if (posts.length < 500 && data.next != null)
-            getPosts(data.next, res);
-        else {
-            res.setHeader('Content-Type', 'application/json');
-            cut(res);
-        }
-
+function getAllPosts(url, res) {
+    var posts = [];
+    getPost(url,posts).then(function (data) {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(data.posts));
     });
 }
-function getPost(url) {
+function getPost(url, posts) {
     return new Promise(function (resolve, reject) {
         request(url, function (error, response, body) {
-            var posts = [];
+
             var data = JSON.parse(body);
             for (var d in data.data) {
                 if (data.data[d].message)
                     posts.push(data.data[d].message);
             }
-            var next = null;
-            if (data.paging)
-                if(data.paging.next)
-                    next = data.paging.next;
-            resolve({ posts: posts, next: next });
+            if (posts.length < 500 && data.paging && data.paging.next)
+                resolve(getPost(data.paging.next,posts));
+            else
+                resolve({posts: posts});
         });
     });
-}
-function cut(res){
-    res.end(JSON.stringify(posts));
 }
