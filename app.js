@@ -7,14 +7,14 @@ var request = require('request');
 var app = express();
 app.use(session({
     secret: process.env.sessionKEY,
-    cookie: { maxAge: 60 * 1000 },
+    cookie: { maxAge: 10 * 60 * 1000 },
     resave: true,
     saveUninitialized: true
 }));
 
 var port = process.env.port || 1337;
 app.use('/', express.static('static'));
-app.get('/api/user', function (req, res) {
+app.get('/api/user', (req, res) => {
     var re;
     if (req.session.name)
         re = { statu: 'ok', name: req.session.name };
@@ -23,11 +23,11 @@ app.get('/api/user', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(re));
 });
-app.get('/api/code', function (req, res) {
-    request('https://graph.facebook.com/v2.8/oauth/access_token?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code' + '&client_secret=' + process.env.appKEY + '&code=' + req.query.code, function (error, response, body) {
+app.get('/api/code',  (req, res) => {
+    request('https://graph.facebook.com/v2.8/oauth/access_token?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code' + '&client_secret=' + process.env.appKEY + '&code=' + req.query.code,  (error, response, body) => {
         var userdata = JSON.parse(body);
         req.session.key = userdata.access_token;
-        getUser(userdata.access_token).then(function (data) {
+        getUser(userdata.access_token).then((data) => {
             req.session.name = data.name;
             req.session.fbid = data.id;
             res.redirect('../');
@@ -35,14 +35,14 @@ app.get('/api/code', function (req, res) {
     });
 });
 
-app.get('/api/post', function (req, res) {
+app.get('/api/post', (req, res) => {
     var url = 'https://graph.facebook.com/v2.8/me/posts?limit=100&access_token=' + req.session.key;
     getAllPosts(url,res);
 });
 http.createServer(app).listen(port);
 
 function getUser(key) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         request('https://graph.facebook.com/v2.8/me?fields=id%2Cname&access_token=' + key, function (error, response, body) {
             resolve(JSON.parse(body));
         });
@@ -50,14 +50,14 @@ function getUser(key) {
 }
 function getAllPosts(url, res) {
     var posts = [];
-    getPost(url,posts).then(function (data) {
+    getPost(url,posts).then((data) => {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(data.posts));
     });
 }
 function getPost(url, posts) {
-    return new Promise(function (resolve, reject) {
-        request(url, function (error, response, body) {
+    return new Promise((resolve, reject) => {
+        request(url, (error, response, body) => {
 
             var data = JSON.parse(body);
             for (var d in data.data) {
