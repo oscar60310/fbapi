@@ -2,18 +2,20 @@ var express = require('express');
 var http = require('http');
 var session = require('express-session');
 var request = require('request');
-
-
 var app = express();
+
+// session 用來儲存登入資料 Facebook username token 等
 app.use(session({
     secret: process.env.sessionKEY,
     cookie: { maxAge: 10 * 60 * 1000 },
     resave: true,
     saveUninitialized: true
 }));
-
+// 通訊埠，放在 Azure 上會開啟預設 80 號，我們在 local server 先使用 1337
 var port = process.env.port || 1337;
+// 放靜待資源，也就是我們主要 html js 等等前端的東西
 app.use('/', express.static('static'));
+// GET user 回傳有沒有登入，沒有的話給 url 請前端把使用者導向登入畫面
 app.get('/api/user', (req, res) => {
     var re;
     if (req.session.name)
@@ -23,6 +25,7 @@ app.get('/api/user', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(re));
 });
+// GET Facebook 登入後會帶入 code 參數回傳到這裡，我們要把 code 拿去換 token，並取得使用者名稱，登入完成後導向至首頁
 app.get('/api/code',  (req, res) => {
     request('https://graph.facebook.com/v2.8/oauth/access_token?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code' + '&client_secret=' + process.env.appKEY + '&code=' + req.query.code,  (error, response, body) => {
         var userdata = JSON.parse(body);
@@ -34,7 +37,7 @@ app.get('/api/code',  (req, res) => {
         });
     });
 });
-
+// GET 取得 500 篇或全部文章
 app.get('/api/post', (req, res) => {
     var url = 'https://graph.facebook.com/v2.8/me/posts?limit=100&access_token=' + req.session.key;
     getAllPosts(url,res);
@@ -48,6 +51,8 @@ function getUser(key) {
         });
     });
 }
+
+
 function getAllPosts(url, res) {
     var posts = [];
     getPost(url,posts).then((data) => {
