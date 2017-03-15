@@ -44,15 +44,16 @@ app.get('/api/post', (req, res) => {
 });
 http.createServer(app).listen(port);
 
+// 向 FB 要求使用者名稱和 ID
 function getUser(key) {
     return new Promise((resolve, reject) => {
-        request('https://graph.facebook.com/v2.8/me?fields=id%2Cname&access_token=' + key, function (error, response, body) {
+        request('https://graph.facebook.com/v2.8/me?fields=id%2Cname&access_token=' + key,  (error, response, body) => {
             resolve(JSON.parse(body));
         });
     });
 }
 
-
+// 取得所有文章
 function getAllPosts(url, res) {
     var posts = [];
     getPost(url,posts).then((data) => {
@@ -60,6 +61,8 @@ function getAllPosts(url, res) {
         res.end(JSON.stringify(data.posts));
     });
 }
+
+// 向 FB 要求文章，每次要求只有 100 篇
 function getPost(url, posts) {
     return new Promise((resolve, reject) => {
         request(url, (error, response, body) => {
