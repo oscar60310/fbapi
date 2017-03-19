@@ -26,8 +26,8 @@ app.get('/api/user', (req, res) => {
     res.end(JSON.stringify(re));
 });
 // GET Facebook 登入後會帶入 code 參數回傳到這裡，我們要把 code 拿去換 token，並取得使用者名稱，登入完成後導向至首頁
-app.get('/api/code',  (req, res) => {
-    request('https://graph.facebook.com/v2.8/oauth/access_token?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code' + '&client_secret=' + process.env.appKEY + '&code=' + req.query.code,  (error, response, body) => {
+app.get('/api/code', (req, res) => {
+    request('https://graph.facebook.com/v2.8/oauth/access_token?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code' + '&client_secret=' + process.env.appKEY + '&code=' + req.query.code, (error, response, body) => {
         var userdata = JSON.parse(body);
         req.session.key = userdata.access_token;
         getUser(userdata.access_token).then((data) => {
@@ -40,14 +40,14 @@ app.get('/api/code',  (req, res) => {
 // GET 取得 500 篇或全部文章
 app.get('/api/post', (req, res) => {
     var url = 'https://graph.facebook.com/v2.8/me/posts?limit=100&access_token=' + req.session.key;
-    getAllPosts(url,res);
+    getAllPosts(url, res);
 });
 http.createServer(app).listen(port);
 
 // 向 FB 要求使用者名稱和 ID
 function getUser(key) {
     return new Promise((resolve, reject) => {
-        request('https://graph.facebook.com/v2.8/me?fields=id%2Cname&access_token=' + key,  (error, response, body) => {
+        request('https://graph.facebook.com/v2.8/me?fields=id%2Cname&access_token=' + key, (error, response, body) => {
             resolve(JSON.parse(body));
         });
     });
@@ -56,7 +56,7 @@ function getUser(key) {
 // 取得所有文章
 function getAllPosts(url, res) {
     var posts = [];
-    getPost(url,posts).then((data) => {
+    getPost(url, posts).then((data) => {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(data.posts));
     });
@@ -73,9 +73,9 @@ function getPost(url, posts) {
                     posts.push(data.data[d].message);
             }
             if (posts.length < 500 && data.paging && data.paging.next)
-                resolve(getPost(data.paging.next,posts));
+                resolve(getPost(data.paging.next, posts));
             else
-                resolve({posts: posts});
+                resolve({ posts: posts });
         });
     });
 }
