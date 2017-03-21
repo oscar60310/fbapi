@@ -31,6 +31,7 @@ app.get('/api/code', (req, res) => {
 
         var userdata = JSON.parse(body);
         req.session.key = userdata.access_token;
+        /*  */
         getUser(userdata.access_token).then((data) => {
             req.session.name = data.name;
             req.session.fbid = data.id;
@@ -41,7 +42,10 @@ app.get('/api/code', (req, res) => {
 // GET 取得 500 篇或全部文章
 app.get('/api/post', (req, res) => {
     var url = 'https://graph.facebook.com/v2.8/me/posts?limit=100&access_token=' + req.session.key;
-    getAllPosts(url, res);
+    getPost(url, []).then((data) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(data.posts));
+    });
 });
 http.createServer(app).listen(port);
 
@@ -54,14 +58,6 @@ function getUser(key) {
     });
 }
 
-// 取得所有文章
-function getAllPosts(url, res) {
-    var posts = [];
-    getPost(url, posts).then((data) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(data.posts));
-    });
-}
 
 // 向 FB 要求文章，每次要求只有 100 篇
 function getPost(url, posts) {
