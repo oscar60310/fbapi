@@ -48,7 +48,7 @@ app.get('/api/post', (req, res) => {
     });
 });
 http.createServer(app).listen(port);
-
+console.log('server started');
 // 向 FB 要求使用者名稱和 ID
 function getUser(key) {
     return new Promise((resolve, reject) => {
