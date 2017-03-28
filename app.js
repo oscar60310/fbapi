@@ -41,7 +41,7 @@ app.get('/api/code', (req, res) => {
 });
 // GET 取得 500 篇或全部文章
 app.get('/api/post', (req, res) => {
-    var url = 'https://graph.facebook.com/v2.8/me/posts?limit=100&access_token=' + req.session.key;
+    var url = 'https://graph.facebook.com/v2.8/me/posts?limit=25&access_token=' + req.session.key;
     getPost(url, []).then((data) => {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(data.posts));
@@ -59,7 +59,7 @@ function getUser(key) {
 }
 
 
-// 向 FB 要求文章，每次要求只有 100 篇
+// 向 FB 要求文章，每次要求只有 25 篇
 function getPost(url, posts) {
     return new Promise((resolve, reject) => {
         request(url, (error, response, body) => {
