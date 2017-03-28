@@ -89,7 +89,7 @@ https://www.facebook.com/v2.8/dialog/oauth?client_id=1850607275217976&redirect_u
 但是，我們不能把 token 直接給你，Cookie 是存在客戶端的，所以很容易被竊取，於是我們給了你一組辨識碼，看到這組辨識碼後，我們在伺服器中找到對應的資料，這就是 Session 的運作原理。
 
 好了，講了這邊麼多，我們先把程式趕上進度吧。
-```javascript=
+```javascript
 var express = require('express');
 var http = require('http');
 var session = require('express-session');
@@ -139,7 +139,7 @@ appID 和 appKEY 請各位自行輸入。
 這個專案我們總共有三個 API 端點要做，第一個就是檢查登入狀態啦，前端會在網頁載入完成之後，發送 GET 要求到這個網址，我們得回應用戶名稱(如果有的話)或授權網址(沒有資料的話)。
 
 聽起來很複雜嗎? 來看看 Code 吧
-```javascript=
+```javascript
 app.get('/api/user', (req, res) => {
     var re;
     if (req.session.name)
@@ -167,7 +167,7 @@ app.get('/api/code', (req, res) => {
 
 ### 5. 取得使用者基本資料
 拿到 token 後，我們得先做一件事情：取得使用者基本資料，取得方法很簡單，直接發送要求到 me 端點就可以了，這裡我們寫成 Promise 型式讓程式碼比較好看。
-```javascript=
+```javascript
 // 向 FB 要求使用者名稱和 ID
 function getUser(key) {
     return new Promise((resolve, reject) => {
@@ -178,7 +178,7 @@ function getUser(key) {
 }
 ```
 接著我們把 ID 和 姓名 存到 session 中，在導回到首頁，這樣這個端點就完成了。
-```javascript=
+```javascript
 // GET Facebook 登入後會帶入 code 參數回傳到這裡，我們要把 code 拿去換 token，並取得使用者名稱，登入完成後導向至首頁
 app.get('/api/code', (req, res) => {
     request('https://graph.facebook.com/v2.8/oauth/access_token?client_id=' + process.env.appID + '&redirect_uri=' + process.env.redirect + '/api/code' + '&client_secret=' + process.env.appKEY + '&code=' + req.query.code, (error, response, body) => {
@@ -217,7 +217,7 @@ function getUser(key) {
 2. 這裡沒辦法顯示你的所有文章，但在最下方會有 paging.next 的網址，提示我們前往下一個分頁。
 3. 這個權限能拿到的文章是所有的貼文，不論是否公開
 
-```javascript=
+```javascript
 // GET 取得 500 篇或全部文章
 app.get('/api/post', (req, res) => {
     var url = 'https://graph.facebook.com/v2.8/me/posts?limit=25&access_token=' + req.session.key;
