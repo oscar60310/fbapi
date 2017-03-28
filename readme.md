@@ -264,7 +264,7 @@ GET /debug_token?
 ## 總結
 看過這篇文章後，你應該對 Facebook Graph API 有更進一步的瞭解了，讀者可以前往 [範例 Github](https://github.com/oscar60310/fbapi) 看看完整程式，我們還有其他課程，若您有興趣，可以[前往報名](http://www.accupass.com/go/node)，或加入[課程社團](https://www.facebook.com/groups/126283061232907/) 一起討論！
 
-第十一屆微軟學生大使　技術組　蔡臻平、詹鈞婷　撰寫
+第十一屆微軟學生大使　技術組　[蔡臻平](https://github.com/oscar60310)、[詹鈞婷](https://github.com/tingting0706)　撰寫
 
 
 
